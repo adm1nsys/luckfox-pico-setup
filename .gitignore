@@ -2,3 +2,6 @@
 images/
 NOTES-local.md
 .DS_Store
+*.HEIC
+*.heic
+camphoto_*
