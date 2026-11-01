@@ -6,9 +6,12 @@ How to get Ubuntu 22.04 running on the Luckfox Pico Max (Rockchip RV1106) after 
 
 The result of months of work with the board's kernel, root filesystem and SDK — documented so that nobody has to repeat it.
 
-<img src="docs/img/board.jpg" alt="Luckfox Pico Max on a breadboard with an ESP32 and an LED garland" width="420">
+<p>
+  <img src="docs/img/board-hub.jpg" alt="Luckfox Pico Max on a breadboard with an ESP32, powered through a USB hub" width="49%">
+  <img src="docs/img/board-garland.jpg" alt="The same setup driving an LED garland" width="49%">
+</p>
 
-*My Luckfox Pico Max (front left, with the Ethernet port) on the breadboard, next to an ESP32 and an LED garland.*
+*My Luckfox Pico Max (front, with the Ethernet port) on the breadboard with an ESP32 and a USB hub — and the same setup with an LED garland wired up.*
 
 ## In short
 
