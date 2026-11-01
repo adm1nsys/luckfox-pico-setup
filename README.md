@@ -21,15 +21,17 @@ The result of months of work with the board's kernel, root filesystem and SDK �
 1. **[Build Ubuntu for the Pico Max](docs/build-ubuntu.md)** — SDK commit, board config, kernel option, flashing, first boot.
 2. **[Shutting down without breaking it](docs/power-off.md)** — why shutdown reboots, the kernel fix, and what goes wrong under load.
 3. **[Pi-hole](docs/pihole.md)** — static address, installation, router setup, maintenance.
-4. **[The SD card layout](docs/storage.md)** — no partition table, only 8 GB of the card in use, and how to fix that before building.
-5. **[Living with 256 MB of RAM](docs/memory.md)** — zram for every day, a big temporary swap for building zigbee2mqtt or Homebridge.
-6. **[Keeping the SD card alive](docs/sd-card.md)** — the card sits above the processor; cooling and fewer writes.
+4. **[What is inside the SDK's images](docs/image-formats.md)** — Rockchip's RKFW, LDR and RKNS containers, and a tool that reads them on any OS.
+5. **[The SD card layout](docs/storage.md)** — no partition table, only 8 GB of the card in use, and how to fix that before building.
+6. **[Living with 256 MB of RAM](docs/memory.md)** — zram for every day, a big temporary swap for building zigbee2mqtt or Homebridge.
+7. **[Keeping the SD card alive](docs/sd-card.md)** — the card sits above the processor; cooling and fewer writes.
 
 ## Scripts
 
 | Script | What it does | Origin | Tested on the board |
 |---|---|---|---|
 | [`scripts/check-image.sh`](scripts/check-image.sh) | Reads board name, storage type and partition layout from SDK images — catches images built for the wrong board before flashing. macOS and Linux. | new | on real images ✅ |
+| [`scripts/rkimage.py`](scripts/rkimage.py) | Reads Rockchip's image formats (update.img, download.bin, idblock.img, FIT, U-Boot env) on any OS and unpacks update.img — no dependencies. | new | on real images ✅ |
 | [`scripts/static-ip.sh`](scripts/static-ip.sh) | Gives the board a fixed Ethernet address, with validation and a backup of the old config. | rewrite of my original script | original ✅, rewrite ❌ |
 | [`scripts/install-pihole.sh`](scripts/install-pihole.sh) | Installs Pi-hole with the official installer and makes it start on boot (systemd or rc.local). | based on my setup script | original ✅, rewrite ❌ |
 | [`scripts/safe-shutdown.sh`](scripts/safe-shutdown.sh) | Stops heavy services one by one, flushes the SD card and halts. | re-creates my lost script (stop everything, then halt) | ❌ |
@@ -48,6 +50,7 @@ The Pico Max looked like a cheaper alternative to a Raspberry Pi Zero. In practi
 - **Ubuntu disappeared** from the official SDK in 2025, and working images were hard to find even on Chinese forums. The SDK history still has it, pinned to the right commit in [build-ubuntu.md](docs/build-ubuntu.md).
 - **SPI** works on the vendor's Buildroot image but has no drivers on Ubuntu, with documentation that is partly Chinese and incomplete.
 - The SDK's board menu **produced images for the wrong board** — found out only after flashing. Hence `check-image.sh`.
+- The images themselves are **Rockchip containers no common tool opens** — on Linux, macOS or Windows. Hence `rkimage.py`, see [image-formats.md](docs/image-formats.md).
 
 Debugging all of this without a USB-UART adapter at hand led to a side project: **[iUART](https://github.com/adm1nsys/ESP32-iUART)**, a wireless serial console on an ESP32.
 

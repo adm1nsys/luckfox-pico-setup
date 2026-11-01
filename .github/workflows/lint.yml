@@ -12,6 +12,16 @@ jobs:
       - uses: actions/checkout@v7
       - name: shellcheck
         run: shellcheck scripts/*.sh
+      - name: rkimage.py smoke test
+        run: |
+          python3 -m py_compile scripts/rkimage.py
+          python3 - <<'PY'
+          import struct, zlib
+          body = b"blkdevparts=mmcblk1:32K(env),6G(rootfs)\0sys_bootargs= root=/dev/mmcblk1p7\0".ljust(32764, b"\0")
+          open("env-test.img", "wb").write(struct.pack("<I", zlib.crc32(body)) + body)
+          PY
+          python3 scripts/rkimage.py info env-test.img | tee out.txt
+          grep -q "CRC32 valid" out.txt && grep -q "blkdevparts=mmcblk1" out.txt
       - name: check-image.sh smoke test
         run: |
           mkdir -p t
