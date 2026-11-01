@@ -2,7 +2,9 @@
 
 A network-wide ad and tracker blocker: the board answers DNS for every device in the network and drops requests to known ad and tracking domains. The Pico Max is small, draws very little power and has Ethernet — a good fit for an always-on DNS server.
 
-Tested with Pi-hole v6 (Core 6.1, Web 6.2) on Ubuntu 22.04 built as in [build-ubuntu.md](build-ubuntu.md).
+This is the easy part. Once Ubuntu runs ([build-ubuntu.md](build-ubuntu.md)), the board is, for Pi-hole, just a small Linux machine like a Raspberry Pi Zero: the same official instructions work one to one, with no board-specific workarounds. What the board adds is around Pi-hole, not in it — a fixed address, little RAM ([memory.md](memory.md)) and a careful shutdown ([power-off.md](power-off.md)).
+
+Tested with Pi-hole v6 (Core 6.1, Web 6.2) on that Ubuntu 22.04 only — not on Luckfox's Buildroot or other images.
 
 ## 1. Fixed address
 

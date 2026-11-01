@@ -1,8 +1,8 @@
-# Ubuntu + Pi-hole on the Luckfox Pico Max
+# Ubuntu on the Luckfox Pico Max — with Pi-hole on top
 
 [![Lint](https://github.com/adm1nsys/luckfox-pico-setup/actions/workflows/lint.yml/badge.svg)](https://github.com/adm1nsys/luckfox-pico-setup/actions/workflows/lint.yml)
 
-How to get Ubuntu 22.04 running on the Luckfox Pico Max (Rockchip RV1106) after Luckfox dropped it from its SDK, make the board shut down instead of rebooting, and turn it into a network-wide DNS ad blocker with Pi-hole.
+How to get Ubuntu 22.04 running on the Luckfox Pico Max (Rockchip RV1106) after Luckfox dropped it from its SDK, make the board shut down instead of rebooting, and understand the SD card layout and image formats the SDK leaves undocumented. That is the hard part. Once Ubuntu runs, the board behaves like a Raspberry Pi Zero, and Pi-hole goes on top with the usual instructions.
 
 The result of months of work with the board's kernel, root filesystem and SDK — documented so that nobody has to repeat it.
 
@@ -20,14 +20,14 @@ The result of months of work with the board's kernel, root filesystem and SDK �
 | **Board** | Luckfox Pico Max — RV1106, 256 MB RAM, 256 MB SPI NAND, Ethernet; Ubuntu runs from an SD card |
 | **System** | Ubuntu 22.04.3 LTS, built from the last Luckfox SDK commit that still includes it |
 | **Fix** | kernel option that stops `shutdown` from rebooting the board |
-| **Use** | always-on Pi-hole DNS server for the home network |
+| **Use** | always-on Pi-hole DNS server for the home network — installed the same way as on a Pi Zero |
 | **Known limits** | 256 MB RAM (swap needed); no SPI drivers on Ubuntu; the board cannot cut its own power; the SD card overheats |
 
 ## Guides
 
 1. **[Build Ubuntu for the Pico Max](docs/build-ubuntu.md)** — SDK commit, board config, kernel option, flashing, first boot.
 2. **[Shutting down without breaking it](docs/power-off.md)** — why shutdown reboots, the kernel fix, and what goes wrong under load.
-3. **[Pi-hole](docs/pihole.md)** — static address, installation, router setup, maintenance.
+3. **[Pi-hole](docs/pihole.md)** — the easy part: static address, the standard installer, router setup.
 4. **[What is inside the SDK's images](docs/image-formats.md)** — Rockchip's RKFW, LDR and RKNS containers, and a tool that reads them on any OS.
 5. **[The SD card layout](docs/storage.md)** — no partition table, only 8 GB of the card in use, and how to fix that before building.
 6. **[Living with 256 MB of RAM](docs/memory.md)** — zram for every day, a big temporary swap for building zigbee2mqtt or Homebridge.
