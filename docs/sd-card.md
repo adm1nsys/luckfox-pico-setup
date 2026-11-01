@@ -7,6 +7,7 @@ What helps:
 - **A card made for it.** Use a *high endurance* card (the kind sold for dashcams and surveillance cameras), 8 GB or more. They are rated for continuous writes and higher temperatures.
 - **Cooling.** A small heatsink on the processor and some airflow keep both the SoC and the card cooler. Don't put the board in a closed box.
 - **Fewer writes.**
+  - No permanent swap file on the card — use zram, and a swap file only while compiling ([memory.md](memory.md)).
   - Keep logs in RAM: in `/etc/systemd/journald.conf` set `Storage=volatile` and `RuntimeMaxUse=16M`.
   - Mount the root filesystem with `noatime` so reading a file does not write to the card (add it to the root entry in `/etc/fstab` or the kernel command line).
   - Pi-hole writes a query database: lower `database.maxDBdays` in `/etc/pihole/pihole.toml` (or under *Settings → All settings* in the web interface), or set it to `0` to turn the long-term database off.
