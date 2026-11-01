@@ -3,6 +3,7 @@
 # Under full load systemd does not manage to stop everything in time, so the heavy services are
 # stopped first, one by one, then the data is flushed and the system halted.
 # Needs a kernel without the Restart power-off driver (see docs/power-off.md), otherwise it reboots.
+# Re-creates the approach of my original (lost) script; this version is not yet tested on the board.
 #
 #   sudo ./safe-shutdown.sh                         # default list below
 #   sudo ./safe-shutdown.sh zigbee2mqtt homebridge   # your own list

@@ -1,6 +1,7 @@
 #!/bin/bash
 # Temporary big swap for compiling on a 256 MB board (zigbee2mqtt, Homebridge, Node.js native modules).
 # Turn it off after the build — constant swapping wears out the SD card.
+# Automates what I did by hand; not yet tested on the board.
 #
 #   sudo ./build-swap.sh on [GB]   # default 3 GB, sets vm.swappiness=100
 #   sudo ./build-swap.sh off       # removes the file, restores the previous swappiness

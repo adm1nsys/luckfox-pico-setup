@@ -16,7 +16,13 @@ sudo reboot
 swapon --show                       # /dev/zram0 should be listed
 ```
 
-A permanent 1 GB swap file on the card — which is what I ran at first, because the board kept running out of memory — works, but it is the fastest way to a dead card.
+The image already comes with a permanent 1 GB swap file on the card: Luckfox's `filesystem_resize.sh` creates `/swapfile` on first boot ([storage.md](storage.md#swap-is-created-for-you)). It keeps the board alive, but it is the fastest way to a dead card. To replace it with zram:
+
+```bash
+sudo swapoff /swapfile
+sudo sed -i '\#^/swapfile #d' /etc/fstab
+sudo rm /swapfile
+```
 
 ## Building software: a big temporary swap file
 

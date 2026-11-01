@@ -21,25 +21,29 @@ The result of months of work with the board's kernel, root filesystem and SDK �
 1. **[Build Ubuntu for the Pico Max](docs/build-ubuntu.md)** — SDK commit, board config, kernel option, flashing, first boot.
 2. **[Shutting down without breaking it](docs/power-off.md)** — why shutdown reboots, the kernel fix, and what goes wrong under load.
 3. **[Pi-hole](docs/pihole.md)** — static address, installation, router setup, maintenance.
-4. **[Living with 256 MB of RAM](docs/memory.md)** — zram for every day, a big temporary swap for building zigbee2mqtt or Homebridge.
-5. **[Keeping the SD card alive](docs/sd-card.md)** — the card sits above the processor; cooling and fewer writes.
+4. **[The SD card layout](docs/storage.md)** — no partition table, only 8 GB of the card in use, and how to fix that before building.
+5. **[Living with 256 MB of RAM](docs/memory.md)** — zram for every day, a big temporary swap for building zigbee2mqtt or Homebridge.
+6. **[Keeping the SD card alive](docs/sd-card.md)** — the card sits above the processor; cooling and fewer writes.
 
 ## Scripts
 
-| Script | What it does |
-|---|---|
-| [`scripts/check-image.sh`](scripts/check-image.sh) | Reads board name, storage type and partition layout from SDK images — catches images built for the wrong board before flashing. macOS and Linux. |
-| [`scripts/static-ip.sh`](scripts/static-ip.sh) | Gives the board a fixed Ethernet address, with validation and a backup of the old config. |
-| [`scripts/install-pihole.sh`](scripts/install-pihole.sh) | Installs Pi-hole with the official installer and makes it start on boot (systemd or rc.local). |
-| [`scripts/build-swap.sh`](scripts/build-swap.sh) | Adds a big temporary swap file with aggressive swapping for compiling Node.js projects, and removes it afterwards. |
-| [`scripts/safe-shutdown.sh`](scripts/safe-shutdown.sh) | Stops heavy services one by one, flushes the SD card and halts — so a busy board doesn't end up with a hard power cut. |
+| Script | What it does | Origin | Tested on the board |
+|---|---|---|---|
+| [`scripts/check-image.sh`](scripts/check-image.sh) | Reads board name, storage type and partition layout from SDK images — catches images built for the wrong board before flashing. macOS and Linux. | new | on real images ✅ |
+| [`scripts/static-ip.sh`](scripts/static-ip.sh) | Gives the board a fixed Ethernet address, with validation and a backup of the old config. | rewrite of my original script | original ✅, rewrite ❌ |
+| [`scripts/install-pihole.sh`](scripts/install-pihole.sh) | Installs Pi-hole with the official installer and makes it start on boot (systemd or rc.local). | based on my setup script | original ✅, rewrite ❌ |
+| [`scripts/safe-shutdown.sh`](scripts/safe-shutdown.sh) | Stops heavy services one by one, flushes the SD card and halts. | re-creates my lost script (stop everything, then halt) | ❌ |
+| [`scripts/build-swap.sh`](scripts/build-swap.sh) | Adds a big temporary swap file with aggressive swapping for compiling Node.js projects, and removes it afterwards. | new helper — I did this by hand | ❌ |
+
+These are patches, not a cure: the board still cannot cut its own power, and a hung system will not be saved by a script.
 
 ## Why this exists
 
 The Pico Max looked like a cheaper alternative to a Raspberry Pi Zero. In practice:
 
 - `shutdown now` and `poweroff` **reboot** the board. Reading the datasheet showed why: the power-off pin is not connected, and Luckfox's kernel turns every power-off into a restart. Support did not see it as a problem. The fix ended up in the kernel config — and even then, with zigbee2mqtt and Homebridge pushing the board to full load, every second shutdown ended in a hard power cut. See [power-off.md](docs/power-off.md).
-- **256 MB of RAM** is not enough for Ubuntu with a few services: it ran with a 1 GB swap file, and building zigbee2mqtt needed several gigabytes of aggressive swap — see [memory.md](docs/memory.md).
+- The card has **no partition table** — the layout lives in the bootloader environment, so no PC can read it — and only **8 GB of a 64 GB card** were in use; adding space on the running system means praying nothing writes in the background. See [storage.md](docs/storage.md).
+- **256 MB of RAM** is not enough for Ubuntu with a few services: it ran with a 1 GB swap file on the card, and building zigbee2mqtt needed several gigabytes of aggressive swap — see [memory.md](docs/memory.md).
 - The **SD card sits right above the processor**, gets hot and dies early — and swap on it makes that worse. See [sd-card.md](docs/sd-card.md).
 - **Ubuntu disappeared** from the official SDK in 2025, and working images were hard to find even on Chinese forums. The SDK history still has it, pinned to the right commit in [build-ubuntu.md](docs/build-ubuntu.md).
 - **SPI** works on the vendor's Buildroot image but has no drivers on Ubuntu, with documentation that is partly Chinese and incomplete.
@@ -47,9 +51,13 @@ The Pico Max looked like a cheaper alternative to a Raspberry Pi Zero. In practi
 
 Debugging all of this without a USB-UART adapter at hand led to a side project: **[iUART](https://github.com/adm1nsys/ESP32-iUART)**, a wireless serial console on an ESP32.
 
+## About this repository
+
+The experiments, builds and findings are my own — months with this board's kernel, root filesystem and SDK. The documentation and the helper scripts were written together with Claude (Anthropic's AI assistant) from my notes and from what I described; the table above says which scripts come from my original setup and which were tested on the board.
+
 ## Notes
 
-- Ubuntu images are not distributed here. Everything is built from Luckfox's public repositories ([luckfox-pico](https://github.com/LuckfoxTECH/luckfox-pico), [pico_ubuntu](https://github.com/luckfox-eng33/pico_ubuntu)); this repository contains only documentation and scripts.
+- Ubuntu images are not distributed here — my prebuilt ones are available on request. Everything is built from Luckfox's public repositories ([luckfox-pico](https://github.com/LuckfoxTECH/luckfox-pico), [pico_ubuntu](https://github.com/luckfox-eng33/pico_ubuntu)); this repository contains only documentation and scripts.
 - Not affiliated with Luckfox or Canonical. Ubuntu is a trademark of Canonical Ltd.
 
 ---
