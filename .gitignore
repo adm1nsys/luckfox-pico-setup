@@ -1,0 +1,4 @@
+# local only: firmware images and notes, not for the public repo
+images/
+NOTES-local.md
+.DS_Store
