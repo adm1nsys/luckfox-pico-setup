@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Ubuntu auf dem Luckfox Pico Max — adm1nsys</title>
+    <meta name="description" content="Ubuntu 22.04 on the Luckfox Pico Max: build from the Luckfox SDK, power-off kernel fix, Rockchip image tools — and Pi-hole on top.">
+    <meta name="theme-color" content="#070707" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f9f9f9" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/adm1nsys/assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@400;500&display=swap">
+    <link rel="stylesheet" href="/adm1nsys/assets/css/style.css">
+    <link rel="stylesheet" href="/adm1nsys/kit/project.css">
+    <style>
+      .photos { display: grid; gap: clamp(0.75rem, 2vw, 1rem); max-width: 44rem; margin: 0 0 clamp(2rem, 5vw, 3rem); }
+      @media (min-width: 640px) { .photos { grid-template-columns: 1fr 1fr; } }
+      .photos figure { margin: 0; }
+      .photos img { display: block; width: 100%; height: auto; border-radius: 16px; }
+      .photos figcaption { margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted); }
+      .guides { margin: 0; padding: 0; list-style: none; counter-reset: guide; }
+      .guides li { counter-increment: guide; display: grid; grid-template-columns: 2rem 1fr; gap: 0.25rem 0.5rem; padding: 0.75rem 0; border-top: 1px solid var(--line-soft); }
+      .guides li:first-child { border-top: 0; padding-top: 0; }
+      .guides li::before { content: counter(guide); font: 500 14px/1.6 var(--mono); color: var(--muted); }
+      .guides a { font: 500 15px/1.5 var(--mono); }
+      .guides span { grid-column: 2; color: var(--text-2); }
+      .status { white-space: nowrap; font: 400 13px/1.4 var(--mono); color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="backdrop backdrop-short" aria-hidden="true"></div>
+
+    <main class="wrap">
+      <header class="page-head">
+        <p class="eyebrow">Rockchip RV1106 · Ubuntu 22.04 · Linux-Kernel · Pi-hole</p>
+        <h1 data-i18n="h1"></h1>
+        <p class="lead" data-i18n="lead"></p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#guides" data-i18n="guidesBtn"></a>
+          <a class="btn" href="https://github.com/adm1nsys/luckfox-pico-setup/archive/refs/heads/main.zip" data-i18n="download"></a>
+          <a class="btn btn-ghost" href="https://github.com/adm1nsys/luckfox-pico-setup" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p class="meta" data-i18n="meta"></p>
+      </header>
+
+      <div class="photos">
+        <figure><img src="img/board-hub.jpg" data-i18n-alt="photo1Alt" width="1200" height="1600"><figcaption data-i18n="photo1Cap"></figcaption></figure>
+        <figure><img src="img/board-garland.jpg" data-i18n-alt="photo2Alt" width="1200" height="1600"><figcaption data-i18n="photo2Cap"></figcaption></figure>
+      </div>
+
+      <div class="folds">
+        <details class="card fold" open>
+          <summary><span data-i18n="shortTitle"></span><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="fold-body">
+            <div class="table-wrap">
+              <table>
+                <tbody>
+                  <tr><td data-i18n="rBoard"></td><td data-i18n="vBoard"></td></tr>
+                  <tr><td data-i18n="rSystem"></td><td data-i18n="vSystem"></td></tr>
+                  <tr><td data-i18n="rFix"></td><td data-i18n="vFix"></td></tr>
+                  <tr><td data-i18n="rUse"></td><td data-i18n="vUse"></td></tr>
+                  <tr><td data-i18n="rLimits"></td><td data-i18n="vLimits"></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <details class="card fold" id="guides" open>
+          <summary><span data-i18n="guidesTitle"></span><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="fold-body">
+            <p data-i18n="guidesNote"></p>
+            <ol class="guides" data-i18n-html="guidesList"></ol>
+          </div>
+        </details>
+
+        <details class="card fold">
+          <summary><span data-i18n="scriptsTitle"></span><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="fold-body">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th data-i18n="thScript"></th><th data-i18n="thWhat"></th><th data-i18n="thTested"></th></tr></thead>
+                <tbody data-i18n-html="scriptsRows"></tbody>
+              </table>
+            </div>
+            <p data-i18n="scriptsNote"></p>
+          </div>
+        </details>
+
+        <details class="card fold">
+          <summary><span data-i18n="whyTitle"></span><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="fold-body" data-i18n-html="whyBody"></div>
+        </details>
+
+        <details class="card fold">
+          <summary><span data-i18n="aboutTitle"></span><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="fold-body" data-i18n-html="aboutBody"></div>
+        </details>
+      </div>
+    </main>
+
+    <script>
+      const REPO = 'https://github.com/adm1nsys/luckfox-pico-setup';
+      const doc = (name, label) => `<a href="${REPO}/blob/main/docs/${name}.md" target="_blank" rel="noopener">${label}</a>`;
+      const sc = (name) => `<a href="${REPO}/blob/main/scripts/${name}" target="_blank" rel="noopener"><code>${name}</code></a>`;
+      const IUART = '<a href="https://adm1nsys.github.io/ESP32-iUART/" target="_blank" rel="noopener">iUART</a>';
+      const LF = '<a href="https://github.com/LuckfoxTECH/luckfox-pico" target="_blank" rel="noopener">luckfox-pico</a>, <a href="https://github.com/luckfox-eng33/pico_ubuntu" target="_blank" rel="noopener">pico_ubuntu</a>';
+      window.PROJECT = {
+        repo: 'adm1nsys/luckfox-pico-setup',
+        license: 'MIT',
+        langs: ['de', 'en'],
+        i18n: {
+          de: {
+            h1: 'Ubuntu auf dem Luckfox Pico Max',
+            lead: 'Wie Ubuntu 22.04 auf dem Luckfox Pico Max (Rockchip RV1106) läuft, nachdem Luckfox es aus dem SDK genommen hat — wie die Platine herunterfährt statt neu zu starten, und was im undokumentierten Speicherlayout und in den Image-Formaten steckt. Das ist der schwere Teil. Danach verhält sich die Platine wie ein Raspberry Pi Zero, und Pi-hole kommt wie gewohnt obendrauf.',
+            guidesBtn: 'Zu den Anleitungen',
+            download: 'Code herunterladen',
+            meta: 'Bash · Python · Linux-Kernel · MIT',
+            photo1Alt: 'Luckfox Pico Max auf einem Steckbrett mit einem ESP32, über einen USB-Hub versorgt',
+            photo1Cap: 'Mein Pico Max (vorne, mit Ethernet) auf dem Steckbrett mit ESP32 und USB-Hub',
+            photo2Alt: 'Derselbe Aufbau steuert eine LED-Lichterkette',
+            photo2Cap: '… und derselbe Aufbau mit einer LED-Lichterkette',
+            shortTitle: 'Kurz gesagt',
+            rBoard: 'Platine', vBoard: 'Luckfox Pico Max — RV1106, 256 MB RAM, 256 MB SPI-NAND, Ethernet; Ubuntu läuft von der SD-Karte',
+            rSystem: 'System', vSystem: 'Ubuntu 22.04.3 LTS, gebaut aus dem letzten Luckfox-SDK-Commit, der es noch enthält',
+            rFix: 'Fix', vFix: 'Kernel-Option, damit „shutdown“ die Platine nicht neu startet',
+            rUse: 'Einsatz', vUse: 'Pi-hole als ständig laufender DNS-Server fürs Heimnetz — installiert wie auf einem Pi Zero',
+            rLimits: 'Grenzen', vLimits: '256 MB RAM (Swap nötig); keine SPI-Treiber unter Ubuntu; die Platine kann sich nicht selbst abschalten; die SD-Karte wird heiß',
+            guidesTitle: 'Anleitungen',
+            guidesNote: 'Die Anleitungen sind auf Englisch und liegen im Repository:',
+            guidesList: `<li>${doc('build-ubuntu', 'Ubuntu für den Pico Max bauen')}<span>SDK-Commit, Board-Konfiguration, Kernel-Option, Flashen, erster Start.</span></li><li>${doc('power-off', 'Herunterfahren, ohne etwas kaputtzumachen')}<span>Warum shutdown neu startet, der Kernel-Fix und was unter Last schiefgeht.</span></li><li>${doc('pihole', 'Pi-hole')}<span>Der einfache Teil: feste Adresse, der Standard-Installer, Einrichtung im Router.</span></li><li>${doc('image-formats', 'Was in den SDK-Images steckt')}<span>Rockchips Container RKFW, LDR und RKNS — und ein Werkzeug, das sie auf jedem System liest.</span></li><li>${doc('storage', 'Das Layout der SD-Karte')}<span>Keine Partitionstabelle, nur 8 GB der Karte in Benutzung — und wie man das vor dem Bauen behebt.</span></li><li>${doc('memory', 'Leben mit 256 MB RAM')}<span>zram für jeden Tag, ein großer temporärer Swap zum Bauen von zigbee2mqtt oder Homebridge.</span></li><li>${doc('sd-card', 'Die SD-Karte am Leben halten')}<span>Die Karte sitzt über dem Prozessor: Kühlung und weniger Schreibzugriffe.</span></li>`,
+            scriptsTitle: 'Skripte',
+            thScript: 'Skript', thWhat: 'Was es tut', thTested: 'Auf der Platine getestet',
+            scriptsRows: `<tr><td>${sc('check-image.sh')}</td><td>Liest Board-Name, Speichertyp und Partitionen aus SDK-Images — erkennt Images für das falsche Board vor dem Flashen. macOS und Linux.</td><td class="status">an echten Images ✅</td></tr><tr><td>${sc('rkimage.py')}</td><td>Liest Rockchips Image-Formate auf jedem System und entpackt update.img — ohne Abhängigkeiten.</td><td class="status">an echten Images ✅</td></tr><tr><td>${sc('static-ip.sh')}</td><td>Feste Ethernet-Adresse, mit Prüfung und Sicherung der alten Konfiguration.</td><td class="status">Original ✅, Neufassung ❌</td></tr><tr><td>${sc('install-pihole.sh')}</td><td>Installiert Pi-hole mit dem offiziellen Installer und startet es beim Booten.</td><td class="status">Original ✅, Neufassung ❌</td></tr><tr><td>${sc('safe-shutdown.sh')}</td><td>Stoppt schwere Dienste nacheinander, leert den Kartenpuffer und hält an.</td><td class="status">❌</td></tr><tr><td>${sc('build-swap.sh')}</td><td>Großer temporärer Swap mit aggressivem Auslagern zum Kompilieren von Node.js-Projekten — und wieder weg.</td><td class="status">❌</td></tr>`,
+            scriptsNote: 'Das sind Pflaster, keine Heilung: die Platine kann sich weiterhin nicht selbst abschalten, und ein hängendes System rettet kein Skript.',
+            whyTitle: 'Warum es das gibt',
+            whyBody: `<p>Der Pico Max sah aus wie eine günstigere Alternative zum Raspberry Pi Zero. In der Praxis:</p><ul><li><code>shutdown now</code> und <code>poweroff</code> <strong>starten die Platine neu</strong>. Das Datenblatt zeigt, warum: der Power-off-Pin ist nicht verbunden, und Luckfox' Kernel macht aus jedem Abschalten einen Neustart. Der Fix landete in der Kernel-Konfiguration — und selbst dann endete unter Volllast mit zigbee2mqtt und Homebridge jedes zweite Herunterfahren mit hartem Stromausfall.</li><li>Die Karte hat <strong>keine Partitionstabelle</strong> — das Layout steht in der Bootloader-Umgebung, kein PC kann sie lesen — und nur <strong>8 GB von 64 GB</strong> waren in Benutzung.</li><li><strong>256 MB RAM</strong> reichen nicht für Ubuntu mit ein paar Diensten; zigbee2mqtt zu bauen brauchte mehrere Gigabyte aggressiven Swap.</li><li>Die <strong>SD-Karte sitzt direkt über dem Prozessor</strong>, wird heiß und stirbt früh.</li><li><strong>Ubuntu verschwand</strong> 2025 aus dem offiziellen SDK; funktionierende Images waren selbst in chinesischen Foren kaum zu finden.</li><li>Das Board-Menü des SDK <strong>baute Images für das falsche Board</strong> — gemerkt erst nach dem Flashen. Daher <code>check-image.sh</code>.</li><li>Die Images sind <strong>Rockchip-Container, die kein gängiges Werkzeug öffnet</strong>. Daher <code>rkimage.py</code>.</li></ul><p>Die Fehlersuche ohne USB-UART-Adapter führte zu einem Nebenprojekt: ${IUART}, eine kabellose serielle Konsole auf einem ESP32.</p>`,
+            aboutTitle: 'Über dieses Repository',
+            aboutBody: `<p>Die Experimente, Builds und Erkenntnisse sind meine eigenen — Monate mit Kernel, Root-Dateisystem und SDK dieser Platine. Die Dokumentation und die Hilfsskripte sind zusammen mit Claude (dem KI-Assistenten von Anthropic) aus meinen Notizen entstanden; die Tabelle der Skripte sagt, welche aus meinem ursprünglichen Setup stammen und welche auf der Platine getestet sind.</p><p>Ubuntu-Images werden hier nicht verteilt — meine fertigen gibt es auf Anfrage. Gebaut wird alles aus Luckfox' öffentlichen Repositories (${LF}). Keine Verbindung zu Luckfox oder Canonical; Ubuntu ist eine Marke von Canonical Ltd.</p>`,
+            title: 'Ubuntu auf dem Luckfox Pico Max — adm1nsys'
+          },
+          en: {
+            h1: 'Ubuntu on the Luckfox Pico Max',
+            lead: 'How to get Ubuntu 22.04 running on the Luckfox Pico Max (Rockchip RV1106) after Luckfox dropped it from its SDK, make the board shut down instead of rebooting, and understand the storage layout and image formats the SDK leaves undocumented. That is the hard part. After that the board behaves like a Raspberry Pi Zero, and Pi-hole goes on top as usual.',
+            guidesBtn: 'Go to the guides',
+            download: 'Download the code',
+            meta: 'Bash · Python · Linux kernel · MIT',
+            photo1Alt: 'Luckfox Pico Max on a breadboard with an ESP32, powered through a USB hub',
+            photo1Cap: 'My Pico Max (front, with Ethernet) on the breadboard with an ESP32 and a USB hub',
+            photo2Alt: 'The same setup driving an LED garland',
+            photo2Cap: '… and the same setup with an LED garland wired up',
+            shortTitle: 'In short',
+            rBoard: 'Board', vBoard: 'Luckfox Pico Max — RV1106, 256 MB RAM, 256 MB SPI NAND, Ethernet; Ubuntu runs from an SD card',
+            rSystem: 'System', vSystem: 'Ubuntu 22.04.3 LTS, built from the last Luckfox SDK commit that still includes it',
+            rFix: 'Fix', vFix: 'kernel option that stops “shutdown” from rebooting the board',
+            rUse: 'Use', vUse: 'always-on Pi-hole DNS server for the home network — installed the same way as on a Pi Zero',
+            rLimits: 'Known limits', vLimits: '256 MB RAM (swap needed); no SPI drivers on Ubuntu; the board cannot cut its own power; the SD card overheats',
+            guidesTitle: 'Guides',
+            guidesNote: 'The guides live in the repository:',
+            guidesList: `<li>${doc('build-ubuntu', 'Build Ubuntu for the Pico Max')}<span>SDK commit, board config, kernel option, flashing, first boot.</span></li><li>${doc('power-off', 'Shutting down without breaking it')}<span>Why shutdown reboots, the kernel fix, and what goes wrong under load.</span></li><li>${doc('pihole', 'Pi-hole')}<span>The easy part: static address, the standard installer, router setup.</span></li><li>${doc('image-formats', 'What is inside the SDK’s images')}<span>Rockchip’s RKFW, LDR and RKNS containers, and a tool that reads them on any OS.</span></li><li>${doc('storage', 'The SD card layout')}<span>No partition table, only 8 GB of the card in use, and how to fix that before building.</span></li><li>${doc('memory', 'Living with 256 MB of RAM')}<span>zram for every day, a big temporary swap for building zigbee2mqtt or Homebridge.</span></li><li>${doc('sd-card', 'Keeping the SD card alive')}<span>The card sits above the processor: cooling and fewer writes.</span></li>`,
+            scriptsTitle: 'Scripts',
+            thScript: 'Script', thWhat: 'What it does', thTested: 'Tested on the board',
+            scriptsRows: `<tr><td>${sc('check-image.sh')}</td><td>Reads board name, storage type and partition layout from SDK images — catches images built for the wrong board before flashing. macOS and Linux.</td><td class="status">on real images ✅</td></tr><tr><td>${sc('rkimage.py')}</td><td>Reads Rockchip’s image formats on any OS and unpacks update.img — no dependencies.</td><td class="status">on real images ✅</td></tr><tr><td>${sc('static-ip.sh')}</td><td>Gives the board a fixed Ethernet address, with validation and a backup of the old config.</td><td class="status">original ✅, rewrite ❌</td></tr><tr><td>${sc('install-pihole.sh')}</td><td>Installs Pi-hole with the official installer and makes it start on boot.</td><td class="status">original ✅, rewrite ❌</td></tr><tr><td>${sc('safe-shutdown.sh')}</td><td>Stops heavy services one by one, flushes the SD card and halts.</td><td class="status">❌</td></tr><tr><td>${sc('build-swap.sh')}</td><td>Adds a big temporary swap file with aggressive swapping for compiling Node.js projects, and removes it afterwards.</td><td class="status">❌</td></tr>`,
+            scriptsNote: 'These are patches, not a cure: the board still cannot cut its own power, and a hung system will not be saved by a script.',
+            whyTitle: 'Why this exists',
+            whyBody: `<p>The Pico Max looked like a cheaper alternative to a Raspberry Pi Zero. In practice:</p><ul><li><code>shutdown now</code> and <code>poweroff</code> <strong>reboot</strong> the board. The datasheet shows why: the power-off pin is not connected, and Luckfox’s kernel turns every power-off into a restart. The fix ended up in the kernel config — and even then, at full load with zigbee2mqtt and Homebridge, every second shutdown ended in a hard power cut.</li><li>The card has <strong>no partition table</strong> — the layout lives in the bootloader environment, so no PC can read it — and only <strong>8 GB of a 64 GB card</strong> were in use.</li><li><strong>256 MB of RAM</strong> is not enough for Ubuntu with a few services; building zigbee2mqtt needed several gigabytes of aggressive swap.</li><li>The <strong>SD card sits right above the processor</strong>, gets hot and dies early.</li><li><strong>Ubuntu disappeared</strong> from the official SDK in 2025, and working images were hard to find even on Chinese forums.</li><li>The SDK’s board menu <strong>produced images for the wrong board</strong> — found out only after flashing. Hence <code>check-image.sh</code>.</li><li>The images are <strong>Rockchip containers no common tool opens</strong>. Hence <code>rkimage.py</code>.</li></ul><p>Debugging all of this without a USB-UART adapter at hand led to a side project: ${IUART}, a wireless serial console on an ESP32.</p>`,
+            aboutTitle: 'About this repository',
+            aboutBody: `<p>The experiments, builds and findings are my own — months with this board’s kernel, root filesystem and SDK. The documentation and the helper scripts were written together with Claude (Anthropic’s AI assistant) from my notes; the scripts table says which come from my original setup and which were tested on the board.</p><p>Ubuntu images are not distributed here — my prebuilt ones are available on request. Everything is built from Luckfox’s public repositories (${LF}). Not affiliated with Luckfox or Canonical; Ubuntu is a trademark of Canonical Ltd.</p>`,
+            title: 'Ubuntu on the Luckfox Pico Max — adm1nsys'
+          }
+        }
+      };
+    </script>
+    <script src="/adm1nsys/kit/project.js"></script>
+  </body>
+</html>

@@ -1,6 +1,15 @@
-# Ubuntu on the Luckfox Pico Max — with Pi-hole on top
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/banner-light.svg">
+  <img src=".github/readme/banner-dark.svg" alt="Luckfox Pico Max — Ubuntu 22.04, kernel fix, image tools" width="100%">
+</picture>
 
-[![Lint](https://github.com/adm1nsys/luckfox-pico-setup/actions/workflows/lint.yml/badge.svg)](https://github.com/adm1nsys/luckfox-pico-setup/actions/workflows/lint.yml)
+<p>
+  <a href="https://adm1nsys.github.io/luckfox-pico-setup/"><img alt="Website" src="https://img.shields.io/badge/Website-070707?style=for-the-badge&logo=safari&logoColor=white"></a>
+  <a href="https://github.com/adm1nsys/luckfox-pico-setup/archive/refs/heads/main.zip"><img alt="Download source" src="https://img.shields.io/badge/Download-source-070707?style=for-the-badge&logo=github&logoColor=white"></a>
+  <img alt="Ubuntu 22.04" src="https://img.shields.io/badge/Ubuntu-22.04-070707?style=for-the-badge&logo=ubuntu&logoColor=white">
+  <img alt="Pi-hole" src="https://img.shields.io/badge/Pi--hole-070707?style=for-the-badge&logo=pihole&logoColor=white">
+  <a href="LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/License-MIT-070707?style=for-the-badge"></a>
+</p>
 
 How to get Ubuntu 22.04 running on the Luckfox Pico Max (Rockchip RV1106) after Luckfox dropped it from its SDK, make the board shut down instead of rebooting, and understand the SD card layout and image formats the SDK leaves undocumented. That is the hard part. Once Ubuntu runs, the board behaves like a Raspberry Pi Zero, and Pi-hole goes on top with the usual instructions.
 
@@ -70,6 +79,6 @@ The experiments, builds and findings are my own — months with this board's ker
 - Ubuntu images are not distributed here — my prebuilt ones are available on request. Everything is built from Luckfox's public repositories ([luckfox-pico](https://github.com/LuckfoxTECH/luckfox-pico), [pico_ubuntu](https://github.com/luckfox-eng33/pico_ubuntu)); this repository contains only documentation and scripts.
 - Not affiliated with Luckfox or Canonical. Ubuntu is a trademark of Canonical Ltd.
 
----
+## License
 
-Heorhii Romanenko · [adm1nsys.github.io](https://adm1nsys.github.io/adm1nsys/) · MIT License
+[MIT](LICENSE) © Heorhii Romanenko
